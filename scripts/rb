@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+var pathFn = require('path')
+var fs = require('fs')
+var check_file = require('./lib/check_file.js')
+var parse = require('./articlelib/index.js')
+
+var api = require('./request/index.js')
+
+const argv =require('yargs')
+  .array('u')
+  .alias('u','update')
+  .help('h')
+  .alias('h','help')
+  .alias('v','version')
+  .describe('u', '上传文件')
+  .version('1.0')
+  .argv
+
+function is_argv_right(){
+  if(argv._.length !=0)
+    return false;
+
+  if(argv.u == undefined)
+    return false;
+
+  return true;
+}
+
+
+
+async function upload(){
+  if( argv.u){
+    for(let i = 0 ;i< argv.u.length;i++){
+      let file  = argv.u[i]
+      let file_path
+      if(file[0] === '/') //绝对路径
+        file_path = file
+      else
+        file_path = pathFn.join(process.cwd(),file.toString())
+      if ( check_file(file_path) ) 
+      {
+        let out = parse(file_path)
+        try {
+          await api.post_article(out)
+          console.log("上传成功:",file_path)
+        }
+        catch(err){
+          console.log("错误:",file_path)
+          console.log(err)
+        }
+      }
+    }
+  }
+}
+
+upload()
+
+
+if( is_argv_right() == false)
+  console.log("没有输入参数,或者输入的参数不对,请输入: rb -h  查看帮助")
+

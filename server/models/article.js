@@ -1,0 +1,22 @@
+var Schema = require("mongoose").Schema
+var shortid = require('shortid')
+
+var ArticleSchema = new Schema({
+  _id:{type:String,default:shortid.generate},
+  title:String, //标题
+  category:[{type:String}],//分类
+  content:String,
+  summary:String,//摘要
+  md5:String,
+  visits:{ type:Number, default:0 },//浏览数量
+  tags:[],
+  hidden:{ type:Boolean, default:false },
+  ctime:{type:Date,default:Date.now},
+  update:{type:Date, default:Date.now },
+  series:{type:String,default:''}
+});
+
+
+ArticleSchema.index({ctime:1,title:1,series:1})
+
+module.exports = ArticleSchema
