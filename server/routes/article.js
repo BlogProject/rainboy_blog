@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var Promise = require('bluebird')
 
 var MA = M['article']
 /* GET article listing. */
-router.get('/',verifyToken,async function(req, res, next) {
+router.get('/',async function(req, res, next) {
 
   let page = req.query.page || 1
   let pageSize = req.query.pageSize || 10
@@ -11,7 +12,7 @@ router.get('/',verifyToken,async function(req, res, next) {
   let query = MA.find({hidden:false})
 
   if( req.query.tags){
-    console.log(tags)
+    debug("tags:",tags)
     let tags = req.query.tags.split("|")
     debug("tags:",tags)
     query  = query.where("tags").in(tags)
@@ -24,9 +25,9 @@ router.get('/',verifyToken,async function(req, res, next) {
     query  = query.where('category').equals(category)
   }
 
-  let sort = "-ctime"
+  let sort = "-date"
   if(req.query.sort == '1'){
-    sort = "ctime"
+    sort = "date"
     debug("sort:",sort)
     query = query.sort(sort)
   }
@@ -35,7 +36,7 @@ router.get('/',verifyToken,async function(req, res, next) {
 
   let skip= Math.ceil(page-1)*pageSize
   let limit = pageSize
-  let data = await query.skip(skip).limit(limit)
+  let data = await query.skip(skip).limit(limit).select("-content")
 
   res.json({
     page:page,
@@ -46,7 +47,7 @@ router.get('/',verifyToken,async function(req, res, next) {
 
 });
 
-router.get('/:id',verifyToken,async function(req, res, next) {
+router.get('/:id',async function(req, res, next) {
   let doc = await MA.findeOne({_id:req.params.id,hidden:false})
 
   if(doc == null){
@@ -64,6 +65,29 @@ router.get('/:id',verifyToken,async function(req, res, next) {
 });
 
 
+router.get('/opt/cst',async function(req,res,next){
+  let docs = await MA.find({}).select("title tags")
+  let category_set = new Set();
+  let tags_set = new Set();
+  let series_set = new Set();
+
+  await Promise.map(docs,function(data){
+    if( typeof(data.category) == 'object')
+    data.category.forEach(function(_data){ category_set.add(_data)})
+    if( typeof(data.tags) == 'object')
+    data.tags.forEach(function(_data){ tags_set.add(_data)})
+    if( data.series !== null && data.series !== undefined )
+    series_set.add(data.series)
+  })
+  res.json({
+    status:0,
+    category:Array.from(category_set),
+    tags:Array.from(tags_set),
+    series:Array.from(series_set)
+  })
+})
+
+
 router.post('/opt/upload',verifyToken,async function(req, res, next) {
   let body = req.body
   let _id = body._id
@@ -76,21 +100,7 @@ router.post('/opt/upload',verifyToken,async function(req, res, next) {
 
 })
 
-router.get('/isExit',verifyToken,async function(req, res, next) {
-  let _id = req.query._id
-
-  let doc = await MA.findOne({_id:_id}).select('-content')
-
-  if( doc === null)
-    res.json({
-      status:-1,
-      doc:null
-    })
-  else
-    res.json({
-      status:0,
-      doc:doc
-    })
-})
+//router.delete('/:id',verifyToken,async function(req, res, next) {
+//})
 
 module.exports = router;

@@ -26,14 +26,14 @@ article
 ```
   _id:{ type:String, unique:true ,default:shorid.generate},
   title:String, //标题
-  category:String,//分类
+  category:{type:Array,defalut:[]},//分类
   content:String,
   summary:String,//摘要
   md5:String,
   visits:{   //浏览数量 type:Number, default:0 }, 
   tags:[],
   hidden:{ type:Boolean, default:false },
-  ctime:{type:Date,default:Date.now},
+  date:{type:Date,default:Date.now},
   update:{type:Date, default:Date.now },
   series:{type:String,default:''}
 })
@@ -51,10 +51,9 @@ _draft_文章标题.md
 _id: rJ7FnyMBb
 title: readme
 date: 2017-07-11 14:16
-update: 2017-07-11 14:16
 series: 系列文章
 summary:
-categories:
+category:
     - 分类 
 tags:
     - tag 
@@ -84,6 +83,82 @@ tags:
 
 ## api设计
 
+### 文章上传
+
+api:`/article/opt/upload`
+method:`post`
+
+接收一个json数据,json的格式为
+
+```js
+{
+    _id:唯一的标识,字符串
+    title:标题
+    categorey:文章的分类
+    content: 原文件解析后的markdown剖分
+    md5:原文件的md5值
+    tags:[] 标签数组
+    hidden: 是否隐藏
+    series: 哪个系列文章
+}
+```
+
+更新文章成功后会返回json数据:
+
+```
+{
+    status:0,
+    doc:doc
+}
+```
+ 
+这个api同样可以用来更新文章,
+
+### 得到某一个文章
+
+api:`/artilce/:id`
+method:`get`
+
+其中`:id`为文章的`_id`标识,返回的json数据数据为:
+
+```js
+{
+    status:0,
+    doc:doc //doc为文章的json格式数据
+}
+```
+
+如果文件不存在:
+
+```js
+{
+    status:-1,
+    message:"not found"
+}
+```
+
+### 得到文件列表
+
+api:`article/`
+method:`get`
+
+### 得到所有的文章的分类和系列和tags
+
+api:`article/opt/cst`
+
+返回数据
+
+```
+    status:0,
+    category: 分类数组
+    tags: 标签数组
+    series: 系列数组
+```
+
+
+
+
+
 | api                      | methods | 作用                                    |
 |--------------------------|---------|-----------------------------------------|
 | /article?fliter          | get     | 得到文件列表                            |
@@ -93,6 +168,22 @@ tags:
 | /images/list             | get     | 图片文件列表                            |
 | /images/upload           | post    | 批量上传图片                            |
 | /images/clearall         | get     | 删除server上的所有图片                  |
+
+## 图片上传
+
+api: `/image/upload`
+method:`post`
+
+只接受的`multipart/form-data`的数据,且图片的`key`为`file`,一次只能上传一个文件,上传到`images`目录,文件名会保侍为原文件名,如果`images`下面已经有同名文件,将会替换且不会提醒.
+
+上传成功后返回的json数据为:
+
+```json
+{
+    "status":0,
+    "message":"ok"
+}
+```
 
 
 ## 文章列表

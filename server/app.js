@@ -40,7 +40,7 @@ function corsConfig (req, res, next) {
 
 app.use('/', require('./routes/index.js'));
 app.use('/article', require('./routes/article.js'));
-//app.use('/images', require('./routes/image.js'));
+app.use('/image', require('./routes/image.js'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
