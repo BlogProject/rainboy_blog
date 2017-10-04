@@ -5,6 +5,27 @@
 
 ## 安装
 
+### 安装后台server
+
+首先安装`docker`,参考阿里云的docker[安装方法](https://yq.aliyun.com/articles/29941)
+
+
+安装`mongodb`
+
+```
+docker pull mongodb
+```
+
+安装blog_server:
+
+```
+cd ./server
+docker build  ./ -t blog_server
+# 运行
+docker run -p 3000:3000 blog_server -d
+```
+
+
 ## 使用
 
 ## 文章
@@ -58,7 +79,6 @@ category
 使用之前设定好自己的token
 
 ```
-
 apush atirle1 article2 article3
 apush aticle_dir //遍历dir下的所有md文件,然后提交
 ```

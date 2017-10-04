@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "inquirer": "^3.3.0",
     "js-yaml": "^3.10.0",
     "md5": "^2.2.1",
     "request-promise": "^4.2.2",

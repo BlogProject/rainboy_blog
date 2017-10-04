@@ -1,5 +1,4 @@
 
-var config = require('../config.js')
 var rq = require('request-promise')
 function get(){
 
@@ -8,9 +7,9 @@ function get(){
 async function post(data){
 
   let opts = {
-    uri:config.server_url+'/article/opt/upload',
+    uri:C.server_url+'/article/opt/upload',
     headers:{
-      token:config.token
+      token:C.token
     },
     method:'POST',
     body:data,

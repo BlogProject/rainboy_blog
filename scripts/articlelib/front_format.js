@@ -52,7 +52,7 @@ function parse(str,options){
             data.date = myDate(data.date);
 
     if(!data.update)
-        data.update = data.date;
+        data.update = Date.now();
     else
         if(typeof(data.update) === "string" )
             data.update = myDate(data.update);

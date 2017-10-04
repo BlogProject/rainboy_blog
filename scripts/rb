@@ -3,16 +3,25 @@ var pathFn = require('path')
 var fs = require('fs')
 var check_file = require('./lib/check_file.js')
 var parse = require('./articlelib/index.js')
+var inquirer  = require('inquirer')
+var questions = require('./questions.js')
+var parseYAML = require('./articlelib/front_format.js').parseYAML
+var listDir = require('./lib/ls.js')
 
 var api = require('./request/index.js')
+
+global.C = parseYAML( fs.readFileSync('./config.yml',{encoding:'utf-8'}))
 
 const argv =require('yargs')
   .array('u')
   .alias('u','update')
+  .array('i')
+  .alias('i','images')
   .help('h')
   .alias('h','help')
   .alias('v','version')
   .describe('u', '上传文件')
+  .describe('i', '上传图片')
   .version('1.0')
   .argv
 
@@ -29,33 +38,62 @@ function is_argv_right(){
 
 
 async function upload(){
-  if( argv.u){
+  if( argv.u.length === 0) // 全体上传
+  {
+    let files = []
+    await inquirer.prompt(questions.upload_all_article)
+    .then(function(answer){
+      if( answer.upload_all)
+        files = listDir(C.base_dir)
+    })
+
+    for(let i = 0;i < files.length;i++)
+      try{
+        __upload(files[i])
+      }
+      catch(err){
+        console.log("错误:",file_path)
+        console.log(err)
+      }
+  }
+  else if( argv.u){      // 上传单个文章
     for(let i = 0 ;i< argv.u.length;i++){
       let file  = argv.u[i]
       let file_path
+
       if(file[0] === '/') //绝对路径
         file_path = file
       else
         file_path = pathFn.join(process.cwd(),file.toString())
-      if ( check_file(file_path) ) 
-      {
-        let out = parse(file_path)
-        try {
-          await api.post_article(out)
-          console.log("上传成功:",file_path)
-        }
-        catch(err){
-          console.log("错误:",file_path)
-          console.log(err)
-        }
+
+      try{
+      __upload(file_path)
+      }
+      catch(err){
+        console.log("错误:",file_path)
+        console.log(err)
       }
     }
   }
 }
+
 
 upload()
 
 
 if( is_argv_right() == false)
   console.log("没有输入参数,或者输入的参数不对,请输入: rb -h  查看帮助")
+
+
+// 上传文章
+async function __upload(file_path){
+  if ( check_file(file_path) )
+  {
+    let out = parse(file_path)
+    await api.post_article(out)
+    console.log("上传成功:",file_path)
+  }
+  else
+    throw Error("文章不存在: "+file_path)
+}
 

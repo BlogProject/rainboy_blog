@@ -54,16 +54,18 @@ router.get('/',async function(req, res, next) {
 });
 
 router.get('/:id',async function(req, res, next) {
-  let doc = await MA.findeOne({_id:req.params.id,hidden:false})
+  //let doc = await MA.findOne({_id:req.params.id,hidden:false})
+  //let nn = await MA.findOneAndUpdate({_id:req.params.id},{"$inc":{visits:1}})
+  let doc = await MA.findOneAndUpdate({_id:req.params.id,hidden:false},{"$inc":{visits:1}})
 
   if(doc == null){
-    return json({
+    res.json({
       status:-1,
       message:"not found"
     })
   }
   else {
-    return json({
+    res.json({
       status:0,
       doc:doc
     })
@@ -72,7 +74,7 @@ router.get('/:id',async function(req, res, next) {
 
 
 router.get('/opt/cst',async function(req,res,next){
-  let docs = await MA.find({}).select("title tags")
+  let docs = await MA.find({hidden:false}).select("title tags category series")
   let category_set = new Set();
   let tags_set = new Set();
   let series_set = new Set();
@@ -97,8 +99,27 @@ router.get('/opt/cst',async function(req,res,next){
 router.post('/opt/upload',verifyToken,async function(req, res, next) {
   let body = req.body
   let _id = body._id
+  //let doc = await MA.findOne({_id:_id})
+
+  //if(doc == null){
+    //doc = await MA.create(body)
+    //res.json({
+      //status:0,
+      //doc:doc
+    //})
+    //return 
+  //}
+
+  //if( doc.md5 === body.md5){
+    //res.json({
+      //status:0,
+      //doc:doc
+    //})
+    //return 
+  //}
+
   delete body._id
-  let doc = await MA.findOneAndUpdate({_id:_id},body,{upsert:true})
+  doc = await MA.findOneAndUpdate({_id:_id},body,{upsert:true,setDefaultsOnInsert:true})
   res.json({
     status:0,
     doc:doc

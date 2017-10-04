@@ -1,0 +1,9 @@
+# 文章的路径
+base_dir: /home/rainboy/mycode/blogData
+#全体上传的时候略过的文件夹或文件名
+exclude:
+  - ._evil
+  - readme.md
+  - _drafts
+server_url: http://localhost:3000
+token: mytoken
