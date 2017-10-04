@@ -6,6 +6,11 @@
 
 如果一个文章是系列文章,它应该和同系列的文章在同一个文件夹
 
+| api                      | methods | 作用                                    |
+|--------------------------|---------|-----------------------------------------|
+| /article?fliter          | get     | 得到文件列表                            |
+| /article/:id             | get     | 得到一个上传的文章                      |
+| /article/opt/upload      | post    | 上传/更新一个文章                       |
 
 ```
 |---- _articles 发布的文章
@@ -14,8 +19,6 @@
  |----  _draft_文章标题.md 草稿文件
 |---- images 图片
 |---- _del_ 删除的文件
-
-
 
 ```
 
@@ -94,8 +97,8 @@ method:`post`
 {
     _id:唯一的标识,字符串
     title:标题
-    categorey:文章的分类
-    content: 原文件解析后的markdown剖分
+    categorey:[]
+    content: 原文件解析后的markdown部分
     md5:原文件的md5值
     tags:[] 标签数组
     hidden: 是否隐藏
@@ -105,7 +108,7 @@ method:`post`
 
 更新文章成功后会返回json数据:
 
-```
+```js
 {
     status:0,
     doc:doc
@@ -142,6 +145,9 @@ method:`get`
 api:`article/`
 method:`get`
 
+
+
+
 ### 得到所有的文章的分类和系列和tags
 
 api:`article/opt/cst`
@@ -159,15 +165,6 @@ api:`article/opt/cst`
 
 
 
-| api                      | methods | 作用                                    |
-|--------------------------|---------|-----------------------------------------|
-| /article?fliter          | get     | 得到文件列表                            |
-| /article/:id             | get     | 得到一个上传的文章                      |
-| /article/opt/upload      | post    | 上传/更新一个文章                       |
-| /article/opt/isExit?_id= | get     | 某个文章是否存在,用于是否上传和更新文章 |
-| /images/list             | get     | 图片文件列表                            |
-| /images/upload           | post    | 批量上传图片                            |
-| /images/clearall         | get     | 删除server上的所有图片                  |
 
 ## 图片上传
 

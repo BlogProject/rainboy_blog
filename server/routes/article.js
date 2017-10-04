@@ -10,29 +10,35 @@ router.get('/',async function(req, res, next) {
   let pageSize = req.query.pageSize || 10
 
   let query = MA.find({hidden:false})
+  let query_data = {hidden:false}
 
   if( req.query.tags){
-    debug("tags:",tags)
-    let tags = req.query.tags.split("|")
+    debug( req.query.tags)
+    let tags = []
+    tags.push( req.query.tags)
+    console.log(tags)
     debug("tags:",tags)
     query  = query.where("tags").in(tags)
+    query_data.tags = {"$in":tags}
   }
 
 
   if(req.query.category){
-    let category = req.query.category
+    let category = []
+    category.push(req.query.category)
     debug("category:",category)
-    query  = query.where('category').equals(category)
+    query  = query.where('category').in(category)
+    query_data.category = {"$in":category}
   }
 
-  let sort = "-date"
+  let sort = "-update"
   if(req.query.sort == '1'){
-    sort = "date"
+    sort = "update"
     debug("sort:",sort)
     query = query.sort(sort)
   }
 
-  let count = await query.count()
+  let count = await MA.find(query_data).count()
 
   let skip= Math.ceil(page-1)*pageSize
   let limit = pageSize
@@ -99,8 +105,5 @@ router.post('/opt/upload',verifyToken,async function(req, res, next) {
   })
 
 })
-
-//router.delete('/:id',verifyToken,async function(req, res, next) {
-//})
 
 module.exports = router;
