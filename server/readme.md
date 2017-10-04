@@ -6,11 +6,12 @@
 
 如果一个文章是系列文章,它应该和同系列的文章在同一个文件夹
 
-| api                      | methods | 作用                                    |
-|--------------------------|---------|-----------------------------------------|
-| /article?fliter          | get     | 得到文件列表                            |
-| /article/:id             | get     | 得到一个上传的文章                      |
-| /article/opt/upload      | post    | 上传/更新一个文章                       |
+| api                 | methods | 作用               |
+|---------------------|---------|--------------------|
+| /article?fliter     | get     | 得到文件列表       |
+| /article/:id        | get     | 得到一个上传的文章 |
+| /article/opt/upload | post    | 上传/更新一个文章  |
+| /image/upload       | post    | 上传图片           |
 
 ```
 |---- _articles 发布的文章
@@ -26,7 +27,7 @@
 
 article
 
-```
+```js
   _id:{ type:String, unique:true ,default:shorid.generate},
   title:String, //标题
   category:{type:Array,defalut:[]},//分类
@@ -47,7 +48,8 @@ article
 
 _draft_文章标题.md
 
-如果文章是以`_draft_`
+如果文章是以`_draft_`,那表明这个文章是一个草稿.
+
 
 ```
 ---
@@ -67,29 +69,16 @@ tags:
 
 ```
 
-### 图片上传
 
-`_images`文件夹下的图片上传
-
- - 读取图片的名字,列表
- - 在web_server下不存在图片文件,并返回一个列表
- - 通过_server返回的列表,批量上传图片
-
-
-返回列表样式:
-
-```
-{
-    'path-key':md5
-}
-```
 
 ## api设计
+
 
 ### 文章上传
 
 api:`/article/opt/upload`
 method:`post`
+需要key
 
 接收一个json数据,json的格式为
 
@@ -142,50 +131,10 @@ method:`get`
 
 ### 得到文件列表
 
-api:`article/`
+api:`article?tags=your_tag&category=your_category&series= your_series`
 method:`get`
 
-
-
-
-### 得到所有的文章的分类和系列和tags
-
-api:`article/opt/cst`
-
-返回数据
-
-```
-    status:0,
-    category: 分类数组
-    tags: 标签数组
-    series: 系列数组
-```
-
-
-
-
-
-
-## 图片上传
-
-api: `/image/upload`
-method:`post`
-
-只接受的`multipart/form-data`的数据,且图片的`key`为`file`,一次只能上传一个文件,上传到`images`目录,文件名会保侍为原文件名,如果`images`下面已经有同名文件,将会替换且不会提醒.
-
-上传成功后返回的json数据为:
-
-```json
-{
-    "status":0,
-    "message":"ok"
-}
-```
-
-
-## 文章列表
-
-参数
+全部参数
 
  - page
  - pageSize
@@ -205,3 +154,36 @@ method:`post`
   "data":[]
 }
 ```
+
+### 得到所有的文章的分类和系列和tags
+
+api:`article/opt/cst`
+
+返回数据
+
+```js
+{
+    status:0,
+    category: 分类数组
+    tags: 标签数组
+    series: 系列数组
+}
+```
+
+### 图片上传
+
+api: `/image/upload`
+method:`post`
+
+只接受的`multipart/form-data`的数据,且图片的`key`为`file`,一次只能上传一个文件,上传到`images`目录,文件名会保侍为原文件名,如果`images`下面已经有同名文件,将会替换且不会提醒.
+
+上传成功后返回的json数据为:
+
+```json
+{
+    "status":0,
+    "message":"ok"
+}
+```
+
+
