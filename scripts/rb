@@ -38,7 +38,7 @@ function is_argv_right(){
 
 
 async function upload(){
-  if( argv.u.length === 0) // 全体上传
+  if( argv.u && argv.u.length === 0) // 全体上传
   {
     let files = []
     await inquirer.prompt(questions.upload_all_article)
@@ -77,8 +77,24 @@ async function upload(){
   }
 }
 
+// 图片上传
+async function image_upload(){
+  if( argv.i &&argv.i.length === 0) // 全体上传
+  {
 
-upload()
+  }
+  else if(argv.i){ // 单个上传
+
+  }
+}
+
+
+// 主函数
+async function __main__(){
+  //await upload();
+  await image_upload()
+}
+__main__()
 
 
 if( is_argv_right() == false)

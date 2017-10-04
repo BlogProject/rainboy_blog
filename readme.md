@@ -9,7 +9,6 @@
 
 首先安装`docker`,参考阿里云的docker[安装方法](https://yq.aliyun.com/articles/29941)
 
-
 安装`mongodb`
 
 ```
@@ -19,6 +18,8 @@ docker pull mongodb
 安装blog_server:
 
 ```
+# 修改token
+echo 'your_token' > ./server/token.txt
 cd ./server
 docker build  ./ -t blog_server
 # 运行
