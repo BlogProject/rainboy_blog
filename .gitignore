@@ -1,3 +1,4 @@
 /server/node_modules/
 /frontEnd/node_modules/
+/frontEnd/dist/
 /scripts/node_modules/
