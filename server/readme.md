@@ -6,12 +6,13 @@
 
 如果一个文章是系列文章,它应该和同系列的文章在同一个文件夹
 
-| api                 | methods | 作用               |
-|---------------------|---------|--------------------|
-| /article?fliter     | get     | 得到文件列表       |
-| /article/:id        | get     | 得到一个上传的文章 |
-| /article/opt/upload | post    | 上传/更新一个文章  |
-| /image/upload       | post    | 上传图片           |
+| api                 | methods | 作用                     |
+|---------------------|---------|--------------------------|
+| /article?fliter     | get     | 得到文件列表             |
+| /article/:id        | get     | 得到一个上传的文章       |
+| /article/opt/upload | post    | 上传/更新一个文章        |
+| /article/cst        | get     | 得到文章的分类,系列,标签 |
+| /image/upload       | post    | 上传图片                 |
 
 ```
 |---- _articles 发布的文章

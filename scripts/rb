@@ -10,7 +10,7 @@ var listDir = require('./lib/ls.js')
 
 var api = require('./request/index.js')
 
-global.C = parseYAML( fs.readFileSync('./config.yml',{encoding:'utf-8'}))
+global.C = parseYAML( fs.readFileSync(pathFn.join(__dirname,'config.yml'),{encoding:'utf-8'}))
 
 const argv =require('yargs')
   .array('u')
@@ -91,7 +91,7 @@ async function image_upload(){
 
 // 主函数
 async function __main__(){
-  //await upload();
+  await upload();
   await image_upload()
 }
 __main__()
@@ -106,6 +106,10 @@ async function __upload(file_path){
   if ( check_file(file_path) )
   {
     let out = parse(file_path)
+    for( key in out){
+      if( key !== 'content')
+      console.log(key,":",out[key])
+    }
     await api.post_article(out)
     console.log("上传成功:",file_path)
   }

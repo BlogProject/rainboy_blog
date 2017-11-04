@@ -33,3 +33,18 @@ function loadModels(_path){
 }
 
 loadModels(base)
+
+
+//创建默认的容器
+async function createDefaultContent(){
+  let CM = M['content']
+  let doc = await CM.findOne({})
+  if( doc == null){
+    debug('开始创建Content......')
+    let content = await CM.create({_id:content_id})
+    console.log(content)
+    debug('创建Content完成!')
+  }
+}
+
+createDefaultContent()

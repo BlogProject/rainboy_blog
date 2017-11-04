@@ -75,11 +75,13 @@ category
 
 见`doc/`文件夹下
 
-## tools工具
+## scripts命令行工具
 
 使用之前设定好自己的token
 
 ```
-apush atirle1 article2 article3
-apush aticle_dir //遍历dir下的所有md文件,然后提交
+rb -u atirle1 article2 article3
+rb -u //遍历base_dir下的所有md文件,然后提交
+rb -i image1 image2 
+rb -i 
 ```

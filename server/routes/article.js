@@ -9,6 +9,9 @@ router.get('/',async function(req, res, next) {
   let page = req.query.page || 1
   let pageSize = req.query.pageSize || 10
 
+  page = parseInt(page)
+  pageSize = parseInt(pageSize)
+
   let query = MA.find({hidden:false})
   let query_data = {hidden:false}
 
@@ -16,12 +19,10 @@ router.get('/',async function(req, res, next) {
     debug( req.query.tags)
     let tags = []
     tags.push( req.query.tags)
-    console.log(tags)
     debug("tags:",tags)
     query  = query.where("tags").in(tags)
     query_data.tags = {"$in":tags}
   }
-
 
   if(req.query.category){
     let category = []
@@ -58,6 +59,10 @@ router.get('/:id',async function(req, res, next) {
   //let nn = await MA.findOneAndUpdate({_id:req.params.id},{"$inc":{visits:1}})
   let doc = await MA.findOneAndUpdate({_id:req.params.id,hidden:false},{"$inc":{visits:1}})
 
+  doc.visits++;
+
+  U.saveHot(doc._id,doc.visits,doc.title)
+
   if(doc == null){
     res.json({
       status:-1,
@@ -65,6 +70,7 @@ router.get('/:id',async function(req, res, next) {
     })
   }
   else {
+
     res.json({
       status:0,
       doc:doc
@@ -74,52 +80,46 @@ router.get('/:id',async function(req, res, next) {
 
 
 router.get('/opt/cst',async function(req,res,next){
-  let docs = await MA.find({hidden:false}).select("title tags category series")
-  let category_set = new Set();
-  let tags_set = new Set();
-  let series_set = new Set();
+  let doc = await M['content'].findOne({});
 
-  await Promise.map(docs,function(data){
-    if( typeof(data.category) == 'object')
-    data.category.forEach(function(_data){ category_set.add(_data)})
-    if( typeof(data.tags) == 'object')
-    data.tags.forEach(function(_data){ tags_set.add(_data)})
-    if( data.series !== null && data.series !== undefined )
-    series_set.add(data.series)
-  })
-  res.json({
-    status:0,
-    category:Array.from(category_set),
-    tags:Array.from(tags_set),
-    series:Array.from(series_set)
-  })
+  doc.status = 0
+  res.json(doc)
 })
 
 
 router.post('/opt/upload',verifyToken,async function(req, res, next) {
   let body = req.body
   let _id = body._id
-  //let doc = await MA.findOne({_id:_id})
-
-  //if(doc == null){
-    //doc = await MA.create(body)
-    //res.json({
-      //status:0,
-      //doc:doc
-    //})
-    //return 
-  //}
-
-  //if( doc.md5 === body.md5){
-    //res.json({
-      //status:0,
-      //doc:doc
-    //})
-    //return 
-  //}
-
   delete body._id
-  doc = await MA.findOneAndUpdate({_id:_id},body,{upsert:true,setDefaultsOnInsert:true})
+  body.update = Date.now()
+  //body.update = Date.now()
+  //debug("body",body)
+  let doc = await MA.findOneAndUpdate({_id:_id},body,{upsert:true,setDefaultsOnInsert:true})
+  //debug(body.tags,body.series,body.category)
+
+  let series
+  let tags = []
+  let category = []
+
+  if(!body.series || typeof(body.series) != 'string')
+    series = '无系列'
+  else
+    series = body.series
+
+  if(U.isArray(body.category))  category = body.category
+  debug(U.isArray(body.tags))
+  if(U.isArray(body.tags))  tags = body.tags
+
+  debug('tags:',tags)
+  debug('series:',series)
+  debug('category:',category)
+
+  M['content'].updateOne({_id:content_id},{$addToSet:{
+    category:{$each: category},
+    tags    :{$each: tags},
+    series  : series,
+  }}).exec()
+
   res.json({
     status:0,
     doc:doc

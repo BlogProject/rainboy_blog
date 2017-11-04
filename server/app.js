@@ -23,10 +23,15 @@ app.use('/images/:name',require('./image.js'));
 
 //全局
 global.debug = require('debug')('debug')
+global.content_id = 'content_id'
 global.verifyToken = require('./verifyToken.js')
 global.C = require('./config.js')
 global.M ={}
 require('./models/except/index.js')
+
+global.U = require('./utils/index.js')
+
+
 
 
 // 处理跨域

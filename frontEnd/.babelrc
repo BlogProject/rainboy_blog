@@ -1,13 +1,6 @@
 {
   "presets": [
-    ["env", { "modules": false }],
-    "stage-2"
+    ["env", { "modules": false }]
   ],
-  "plugins": ["transform-runtime"],
-  "env": {
-    "test": {
-      "presets": ["env", "stage-2"],
-      "plugins": [ "istanbul" ]
-    }
-  }
+  "plugins": ["transform-object-rest-spread"]
 }

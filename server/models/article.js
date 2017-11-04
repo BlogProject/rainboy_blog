@@ -17,6 +17,6 @@ var ArticleSchema = new Schema({
 });
 
 
-ArticleSchema.index({ctime:1,title:1,series:1})
+ArticleSchema.index({update:-1,title:1,tags:1})
 
 module.exports = ArticleSchema
