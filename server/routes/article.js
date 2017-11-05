@@ -43,7 +43,7 @@ router.get('/',async function(req, res, next) {
 
   let skip= Math.ceil(page-1)*pageSize
   let limit = pageSize
-  let data = await query.skip(skip).limit(limit).select("-content")
+  let data = await query.sort(sort).skip(skip).limit(limit).select("-content")
 
   res.json({
     page:page,
