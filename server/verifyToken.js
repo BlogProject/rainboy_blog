@@ -1,6 +1,7 @@
 var fs = require("fs")
+var path = require("path")
 
-var Gtoken = fs.readFileSync('./token.txt',{encoding:'utf-8'})
+var Gtoken = fs.readFileSync(path.join(__dirname,'token.txt'),{encoding:'utf-8'})
 Gtoken = Gtoken.trim()
 debug("token:",Gtoken)
 

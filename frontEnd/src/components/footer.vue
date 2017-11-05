@@ -1,6 +1,7 @@
 <template>
   <div class="layout-footer">
     2011-2016 &copy; Rainboy
+<p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
   </div>
 </template>
 
