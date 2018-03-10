@@ -3,15 +3,17 @@ var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
-var cors = require('cors')
+//var cors = require('cors')
 
 
 
 var app = express();
 
 // enable all cors
-app.use(cors())
+//app.use(cors())
 
+//网页
+app.user(express.static("../frontEnd/dist"))
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
