@@ -51,7 +51,7 @@ function corsConfig (req, res, next) {
 }
 
 
-app.use('/', require('./routes/index.js'));
+//app.use('/', require('./routes/index.js'));
 app.use('/article', require('./routes/article.js'));
 app.use('/image', require('./routes/image.js'));
 
