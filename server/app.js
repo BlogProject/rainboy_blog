@@ -13,7 +13,7 @@ var app = express();
 //app.use(cors())
 
 //网页
-app.user(express.static("../frontEnd/dist"))
+app.use(express.static("../frontEnd/dist"))
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
