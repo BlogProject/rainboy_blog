@@ -1,7 +1,7 @@
 
 ## blog2
 
-基于vue2.0的,对上一个基于vue1.0的版本,加上好用的iview组件库写给**Rainboy**自己用的Blog
+基于vue2.0的,对上一个基于vue1.0的版本,加上好用的iview组件库写给自己用的Blog
 
 ## 安装
 
