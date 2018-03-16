@@ -29,6 +29,14 @@ docker run -p 3000:3000 blog_server -d
 
 ## 使用
 
+### 1.如何加入自己的头像
+
+替换`frontEnd/static/avatar.png`
+
+### 2.如何改变loading
+
+替换`frontEnd/static/loading.gif`
+
 ## 文章
 
 ### 文章的属性yml
