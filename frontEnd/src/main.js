@@ -29,6 +29,8 @@ Vue.prototype.gotoTop = function(){
   scrollTo(0,0);
 }
 
+/* 删除loading */
+document.getElementById("loading").setAttribute("style","display:none")
 
 new Vue({
   el: '#app',

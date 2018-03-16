@@ -1,6 +1,7 @@
 var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: './src/main.js',
@@ -71,10 +72,14 @@ if (process.env.NODE_ENV === 'production') {
       minimize: true
     }),
     new HtmlWebpackPlugin({
-      favicon:'./src/assets/favicon.ico',
+      favicon:'./static/favicon.ico',
       title:'RainboyBlog',
       template:'__index.html',
       inject:'false',
-    })
+    }),
+    new CopyWebpackPlugin([
+      {from:"./static/loading.gif"},
+      {from:"./static/avatar.png"},
+    ])
   ])
 }
