@@ -86,6 +86,7 @@ if (process.env.NODE_ENV === 'production') {
     new CopyWebpackPlugin([
       {from:"./static/loading.css"},
       {from:"./static/avatar.png"},
+      {from:"./aboutme.md"},
     ])
   ])
 }
