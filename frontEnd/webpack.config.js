@@ -5,6 +5,12 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: './src/main.js',
+  externals:{
+    iview:"iview",
+    vue:"Vue",
+    "highlight.js":"hljs",
+    katex:"katex"
+  },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath:process.env.NODE_ENV==='production'?'/':'/dist/',
@@ -78,7 +84,7 @@ if (process.env.NODE_ENV === 'production') {
       inject:'false',
     }),
     new CopyWebpackPlugin([
-      {from:"./static/loading.gif"},
+      {from:"./static/loading.css"},
       {from:"./static/avatar.png"},
     ])
   ])

@@ -3,12 +3,12 @@ import App from './App.vue'
 
 import router from './router'
 import iView from 'iview'
-import 'iview/dist/styles/iview.css'
+//import 'iview/dist/styles/iview.css'
 import store from './vuex/index.js'
 
 
 import "rmarked/css/github-markdown.css"
-import "katex/dist/katex.min.css"
+//import "katex/dist/katex.min.css"
 
 //引入高亮的主题,可以改成自己喜欢的
 import "highlight.js/styles/tomorrow-night-blue.css"
