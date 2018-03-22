@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "start:nohup": "nohup node ./bin/www >/dev/null &",
     "debug": "DEBUG=debug node ./bin/www"
   },
   "dependencies": {
