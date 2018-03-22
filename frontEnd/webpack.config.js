@@ -78,7 +78,6 @@ if (process.env.NODE_ENV === 'production') {
       minimize: true
     }),
     new HtmlWebpackPlugin({
-      favicon:'./static/favicon.ico',
       title:'RainboyBlog',
       template:'__index.html',
       inject:'false',

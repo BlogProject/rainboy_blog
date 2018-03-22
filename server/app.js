@@ -2,21 +2,23 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-
-//var cors = require('cors')
+var compression = require('compression')
+var favicon = require('serve-favicon')
 
 
 
 var app = express();
 
-// enable all cors
-//app.use(cors())
+//使用 gzip
+app.use(compression());
+
 
 //网页
 app.use(express.static("../frontEnd/dist"))
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// 使用favcion
+app.use(favicon(path.join(__dirname, '../frontEnd/static', 'favicon.ico')));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,6 +27,15 @@ app.use('/images/:name',require('./image.js'));
 
 //全局
 global.debug = require('debug')('debug')
+
+
+if(process.env.DEBUG == "debug"){
+  debug("开启跨域")
+  var cors = require('cors')
+  app.use(cors())
+}
+
+
 global.content_id = 'content_id'
 global.verifyToken = require('./verifyToken.js')
 global.C = require('./config.js')
@@ -32,8 +43,6 @@ global.M ={}
 require('./models/except/index.js')
 
 global.U = require('./utils/index.js')
-
-
 
 
 // 处理跨域

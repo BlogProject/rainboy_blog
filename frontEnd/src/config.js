@@ -27,7 +27,7 @@ module.exports = {
         ],
     rmarkedConfigs:{
       image:true,
-      image_base:'http://localhost:3000/',
+      image_base:'/',
       clipbordCopy:true
     }
   }
